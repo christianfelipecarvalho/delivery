@@ -53,7 +53,7 @@ public class ClienteServices {
 		entity.setCpf(cliente.getCpf());
 		entity.setRg(cliente.getRg());
 		entity.setEmail(cliente.getEmail());
-		entity.setEndereco(cliente.getEndereco());
+		//entity.setEndereco(cliente.getEndereco());
 		
 		
 		return repository.save(cliente);
