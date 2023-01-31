@@ -1,13 +1,13 @@
-spring: 
-  datasource:
-      driver-class-name: com.postgressql.cj.jdbc.Driver
-      url: jdbc:postgresql://localhost:5432/delivery?useTimezone=true&serverTimezone=UTC
-      username: postgres
-      password: 1010
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: false
+#spring: 
+  #datasource:
+      #driver-class-name: com.postgressql.cj.jdbc.Driver
+      #url: jdbc:postgresql://localhost:5432/delivery?useTimezone=true&serverTimezone=UTC
+      #username: postgres
+      #password: 1010
+  #jpa:
+    #hibernate:
+      #ddl-auto: update
+    #properties:
+      #hibernate:
+        #dialect: org.hibernate.dialect.PostgreSQLDialect
+    #show-sql: false

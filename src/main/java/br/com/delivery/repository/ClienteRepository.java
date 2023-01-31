@@ -1,4 +1,4 @@
-package br.com.delivery.repository;
+/*package br.com.delivery.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,4 +8,4 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 	
 	
 
-}
+}*/
