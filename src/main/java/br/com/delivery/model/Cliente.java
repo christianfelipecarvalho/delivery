@@ -2,39 +2,39 @@ package br.com.delivery.model;
 
 import java.io.Serializable;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+//import jakarta.persistence.Column;
+//import jakarta.persistence.Entity;
+//import jakarta.persistence.GeneratedValue;
+//import jakarta.persistence.GenerationType;
+//import jakarta.persistence.Id;
+//import jakarta.persistence.Table;
 
-@Entity
-@Table(name= "cliente")
+//@Entity
+//@Table(name= "cliente")
 public class Cliente implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, length = 100)
+	//@Column(nullable = false, length = 100)
 	private String nome;
 	
-	@Column(nullable = false, length = 100)
+	//@Column(nullable = false, length = 100)
 	private String sobrenome;
 	
-	@Column(nullable = false, length = 200)
+	//@Column(nullable = false, length = 200)
 	private String email;
 	
-	@Column(nullable = false, length = 14)
+	//@Column(nullable = false, length = 14)
 	private String cpf;
 	
-	@Column(length = 10)
+	//@Column(length = 10)
 	private String rg;
 	
-	@Column(length = 255)
+	//@Column(length = 255)
 	private String endereco;
 	
 	public Long getId() {
@@ -93,7 +93,4 @@ public class Cliente implements Serializable{
 		this.endereco = endereco;
 	}
 	
-	
-	
-
 }
