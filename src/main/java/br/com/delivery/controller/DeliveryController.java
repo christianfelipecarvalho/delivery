@@ -18,6 +18,7 @@ import br.com.delivery.model.Cliente;
 import br.com.delivery.model.Pedido;
 import br.com.delivery.model.Produto;
 import br.com.delivery.services.ClienteServices;
+import br.com.delivery.services.PedidoServices;
 
 @RestController
 @RequestMapping("/delivery")
@@ -25,21 +26,30 @@ public class DeliveryController {
 
 	@Autowired
 	ClienteServices clienteServices;
+	@Autowired
+	PedidoServices pedidoServices;
 	
 	//PEDIDOS
 	
 	@GetMapping(value = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
-	public void buscaPedidos(){}
-	// select de todos os pedidos no banco 
+	public List<Pedido> buscaPedidos(){
+		return pedidoServices.findAll();
+	}
 	
 	
-	@GetMapping(value =  "/pedido/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Long buscaPedidoPorId(@PathVariable(value="id") Long id) {
+	
+	@GetMapping(value =  "/buscapedidoporid/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Pedido buscaPedidoPorId(@PathVariable(value="id") Long id) {
 		
-		return id; // adicionar o service da consulta pedido 
+		return pedidoServices.findById(id);// adicionar o service da consulta pedido 
 	}
 
-
+	@GetMapping(value="/buscapedidopornumero/{numero}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Pedido buscaPedidoPorNumero(@PathVariable(value="numero") String numero) {
+		return pedidoServices.findByNumero(numero);
+	}
+	
+	
 	@PostMapping(value = "/cadastrapedido", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void cadastraPedido(@RequestBody Pedido pedido) {
 		
@@ -73,11 +83,22 @@ public class DeliveryController {
 	}
 	
 	
-	@GetMapping(value="/buscaclientepornomeesobrenome/{nome}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/buscaclientepornome/{nome}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public List<Cliente> buscaClientePorNome(@PathVariable(value="nome") String nome,
-											@RequestParam(value="sobrenome", defaultValue="none") String sobrenome) {
+											@RequestParam(value="sobrenome", defaultValue="") String sobrenome) {
 		
-		return clienteServices.findByNomeAndSobrenome(nome, sobrenome);
+		return clienteServices.findByNome(nome, sobrenome);
+	}
+	
+	@GetMapping(value="/buscaclienteporcpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
+	public Cliente buscaClientePorCpf(@PathVariable(value="cpf") String cpf) {
+		return clienteServices.findByCpf(cpf);
+	}
+	
+	
+	@GetMapping(value="/buscaclienteporrg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Cliente buscaClientePorRg(@PathVariable(value="rg") String rg) {
+		return clienteServices.findByRg(rg);
 	}
 	
 	
@@ -97,6 +118,7 @@ public class DeliveryController {
 		return clienteServices.update(cliente); //atualiza o cadastro de um cliente.
 		
 	}// altera o cadastro do cliente 
+	
 	
 	@DeleteMapping(value="/apagarcliente/{id}")
 	public void apagarCliente(@PathVariable(value="id") Long id) {

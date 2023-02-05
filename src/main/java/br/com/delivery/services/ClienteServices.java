@@ -7,10 +7,15 @@ import java.util.logging.Logger;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
+
+import br.com.delivery.exceptions.FormatoIncorretoDeDadoException;
+import br.com.delivery.exceptions.ResourceNotFoundException;
 //
 //import br.com.delivery.exceptions.ResourceNotFoundException;
 import br.com.delivery.mocks.ClienteMock;
 import br.com.delivery.model.Cliente;
+import br.com.delivery.validadores.ValidadorFormatoCPF;
+import br.com.delivery.validadores.ValidadorFormatoRg;
 //import br.com.delivery.repository.ClienteRepository;
 
 @Service
@@ -43,40 +48,88 @@ public class ClienteServices {
 	}
 	
 	
-	public List<Cliente> findByNomeAndSobrenome(String nome, String sobrenome) {
-		List<Cliente> clientes = new ArrayList<>();
-		
+	public List<Cliente> findByNome(String nome, String sobrenome) {
+		List<Cliente> clientesEncontrados = new ArrayList<>();
+		List<Cliente> clientesCadastrados = new ArrayList<>();
+	
 		Cliente cliente1 = ClienteMock.criarMockdoCliente(1L);
 		cliente1.setNome("jorge");
 		cliente1.setSobrenome("costa");
+		clientesCadastrados.add(cliente1);
+		
 		
 		Cliente cliente2 = ClienteMock.criarMockdoCliente(2L);
-		cliente2.setNome("christian");
+		cliente2.setNome("jorge");
 		cliente2.setSobrenome("felipe");
-		
+		clientesCadastrados.add(cliente2);
 		
 		Cliente cliente3 = ClienteMock.criarMockdoCliente(3L);
-		cliente3.setNome(nome);
-		cliente3.setSobrenome(sobrenome);
+		cliente3.setNome("nathan");
+		cliente3.setSobrenome("matheus");
+		clientesCadastrados.add(cliente3);
 		
-		if (cliente1.getNome().equals(nome) && cliente1.getSobrenome().equals(sobrenome)) {
-			clientes.add(cliente1);}
+		for (Cliente cliente: clientesCadastrados) {
+			
+			if (cliente.getNome().equals(nome) && cliente.getSobrenome().equals(sobrenome)) {
+				clientesEncontrados.add(cliente);
+				//Implementar select no banco por nome e sobrenome
+			}
+			
+			else if(cliente.getNome().equals(nome) && sobrenome.equals("")) {
+				clientesEncontrados.add(cliente);
+				//Implementar select no banco por nome
+			}
+						
+		}
+		
+		if (clientesEncontrados.size() == 0) {
+			throw new ResourceNotFoundException("não foi encontrado nenhum cliente com o nome informado");
+		}
+		
+		return clientesEncontrados;
+	}
+	
+	public Cliente findByCpf(String cpf) {
+		
+		if (!ValidadorFormatoCPF.validarFormatoCPF(cpf)) {
+			throw new FormatoIncorretoDeDadoException("O cpf informado deve estar no formato ***.***.***-**");
+		}
+		
+		Cliente cliente = ClienteMock.criarMockdoCliente(1L);
+		cliente.setCpf("123.456.789-10");
+		
+		if (!cpf.equals(cliente.getCpf())) {
+			throw new ResourceNotFoundException("Não existe nenhum cadastro com este cpf");
+		}
 		
 		
-		if (cliente2.getNome().equals(nome) && cliente2.getSobrenome().equals(sobrenome)) {
-			clientes.add(cliente2);}
+		return cliente;
+	}
+	
+	public Cliente findByRg(String rg) {
 		
-		if (cliente3.getNome().equals(nome) && cliente3.getSobrenome().equals(sobrenome)) {
-			clientes.add(cliente3);}
+		if (!ValidadorFormatoRg.validarFormatoRg(rg)) {
+			throw new FormatoIncorretoDeDadoException("O rg informado deve estar no formato **.***.***-*");
+		}
 		
-		return clientes;
+		
+		Cliente cliente = ClienteMock.criarMockdoCliente(1L);
+		cliente.setRg("12.345.789-1");
+		
+		if(!rg.equals(cliente.getRg())) {
+			throw new ResourceNotFoundException("Não existe nenhum cadastro com o Rg informado");
+		}
+		
+		return cliente;
 	}
 	
 	public Cliente create(Cliente cliente) {
 		
+		
 		logger.info("Um cliente criado!");
 		
 		//return repository.save(cliente);
+		
 		return cliente;
 		
 	}
