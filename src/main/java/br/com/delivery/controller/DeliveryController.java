@@ -38,16 +38,16 @@ public class DeliveryController {
 	
 	
 	
-	@GetMapping(value =  "/buscapedidoporid/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Pedido buscaPedidoPorId(@PathVariable(value="id") Long id) {
-		
-		return pedidoServices.findById(id);// adicionar o service da consulta pedido 
-	}
-
-	@GetMapping(value="/buscapedidopornumero/{numero}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public Pedido buscaPedidoPorNumero(@PathVariable(value="numero") String numero) {
-		return pedidoServices.findByNumero(numero);
-	}
+//	@GetMapping(value =  "/buscapedidoporid/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+//	public Pedido buscaPedidoPorId(@PathVariable(value="id") Long id) {
+//		
+//		return pedidoServices.findById(id);// adicionar o service da consulta pedido 
+//	}
+//
+//	@GetMapping(value="/buscapedidopornumero/{numero}", produces=MediaType.APPLICATION_JSON_VALUE)
+//	public Pedido buscaPedidoPorNumero(@PathVariable(value="numero") String numero) {
+//		return pedidoServices.findByNumero(numero);
+//	}
 	
 	
 	@PostMapping(value = "/cadastrapedido", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -90,16 +90,16 @@ public class DeliveryController {
 		return clienteServices.findByNome(nome, sobrenome);
 	}
 	
-	@GetMapping(value="/buscaclienteporcpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
-	public Cliente buscaClientePorCpf(@PathVariable(value="cpf") String cpf) {
-		return clienteServices.findByCpf(cpf);
-	}
-	
-	
-	@GetMapping(value="/buscaclienteporrg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public Cliente buscaClientePorRg(@PathVariable(value="rg") String rg) {
-		return clienteServices.findByRg(rg);
-	}
+//	@GetMapping(value="/buscaclienteporcpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
+//	public Cliente buscaClientePorCpf(@PathVariable(value="cpf") String cpf) {
+//		return clienteServices.findByCpf(cpf);
+//	}
+//	
+//	
+//	@GetMapping(value="/buscaclienteporrg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
+//	public Cliente buscaClientePorRg(@PathVariable(value="rg") String rg) {
+//		return clienteServices.findByRg(rg);
+//	}
 	
 	
 	@PostMapping(value = "/cadastracliente", produces = MediaType.APPLICATION_JSON_VALUE,
