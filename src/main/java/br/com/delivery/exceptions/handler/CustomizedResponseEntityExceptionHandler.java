@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import br.com.delivery.exceptions.ExceptionResponse;
 import br.com.delivery.exceptions.FormatoIncorretoDeDadoException;
+import br.com.delivery.exceptions.ResourceFoundException;
 import br.com.delivery.exceptions.ResourceNotFoundException;
 
 @ControllerAdvice
@@ -40,6 +41,16 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 		
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 		
+	}
+	
+	@ExceptionHandler(ResourceFoundException.class)
+	public final ResponseEntity<ExceptionResponse> handleResourceFoundException(Exception ex, WebRequest request) {
+		
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(),
+																	ex.getMessage(),
+																	request.getDescription(false));
+		
+		return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
 	}
 	
 	
