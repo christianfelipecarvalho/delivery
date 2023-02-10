@@ -7,9 +7,13 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.delivery.exceptions.FormatoIncorretoDeDadoException;
+import br.com.delivery.exceptions.ResourceFoundException;
 import br.com.delivery.exceptions.ResourceNotFoundException;
 import br.com.delivery.model.Cliente;
 import br.com.delivery.repository.ClienteRepository;
+import br.com.delivery.validadores.ValidadorFormatoCPF;
+import br.com.delivery.validadores.ValidadorFormatoRg;
 
 @Service
 public class ClienteServices {
@@ -36,68 +40,77 @@ public class ClienteServices {
 	
 	
 	public List<Cliente> findByNome(String nome, String sobrenome) {
-		List<Cliente> clientesEncontrados = new ArrayList<>();
-		List<Cliente> clientesCadastrados = new ArrayList<>();
-	
-				
-		for (Cliente cliente: clientesCadastrados) {
-			
-			if (cliente.getNome().equals(nome) && cliente.getSobrenome().equals(sobrenome)) {
-				clientesEncontrados.add(cliente);
-				//Implementar select no banco por nome e sobrenome
-			}
-			
-			else if(cliente.getNome().equals(nome) && sobrenome.equals("")) {
-				clientesEncontrados.add(cliente);
-				//Implementar select no banco por nome
-			}
-						
+		List<Cliente> clientes = new ArrayList<>();
+		
+		if (sobrenome.length() > 0) {
+			clientes = repository.findByNomeAndSobrenome(nome, sobrenome);
 		}
 		
-		if (clientesEncontrados.size() == 0) {
-			throw new ResourceNotFoundException("não foi encontrado nenhum cliente com o nome informado");
+		else {
+			clientes = repository.findByNome(nome);
 		}
 		
-		return clientesEncontrados;
+		
+		if (clientes.size() == 0) {
+			throw new ResourceNotFoundException("Não foi encontrado nenhum cliente com o nome fornecido");
+		}
+		
+		return clientes;
 	}
 	
-//	public Cliente findByCpf(String cpf) {
-//		
-//		if (!ValidadorFormatoCPF.validarFormatoCPF(cpf)) {
-//			throw new FormatoIncorretoDeDadoException("O cpf informado deve estar no formato ***.***.***-**");
-//		}
-//		
-//		
-//		
-//		if (!cpf.equals(cliente.getCpf())) {
-//			throw new ResourceNotFoundException("Não existe nenhum cadastro com este cpf");
-//		}
-//		
-//		
-//		return cliente;
-//	}
+	public Cliente findByCpf(String cpf) {
+		
+		if (!ValidadorFormatoCPF.validarFormatoCPF(cpf)) {
+			throw new FormatoIncorretoDeDadoException("O cpf informado deve estar no formato ***.***.***-**");
+		}
+		
+		Cliente cliente = repository.findByCpf(cpf);
+		
+		
+		if (cliente == null) {
+			throw new ResourceNotFoundException("não existe nenhum cliente com este cpf");
+		}
+		
+		return cliente;
+	}
 	
-//	public Cliente findByRg(String rg) {
-//		
-//		if (!ValidadorFormatoRg.validarFormatoRg(rg)) {
-//			throw new FormatoIncorretoDeDadoException("O rg informado deve estar no formato **.***.***-*");
-//		}
-//		
-//		
-//		Cliente cliente = ClienteMock.criarMockdoCliente(1L);
-//		cliente.setRg("12.345.789-1");
-//		
-//		if(!rg.equals(cliente.getRg())) {
-//			throw new ResourceNotFoundException("Não existe nenhum cadastro com o Rg informado");
-//		}
-//		
-//		return cliente;
-//	}
+	public Cliente findByRg(String rg) {
+		
+		if (!ValidadorFormatoRg.validarFormatoRg(rg)) {
+			throw new FormatoIncorretoDeDadoException("O rg informado deve estar no formato **.***.***-*");}
+		
+		Cliente cliente = repository.findByRg(rg);
+		
+		if (cliente == null) {
+			throw new ResourceNotFoundException("Não há nenhum cadastro com este rg, tente novamente");
+		}
+		
+		return cliente;
+		
+		
+		}
+	
 	
 	public Cliente create(Cliente cliente) {
 		
+		Cliente clienteBuscadoPorCpf = repository.findByCpf(cliente.getCpf());
+		Cliente clienteBuscadoPorRg = repository.findByRg(cliente.getRg());
 		
-		logger.info("Um cliente criado!");
+		if (clienteBuscadoPorCpf != null && clienteBuscadoPorRg != null) {
+			throw new ResourceFoundException("Já existe um cadastro com o cpf e rg informados");
+			
+		}
+		
+		else if (clienteBuscadoPorCpf != null) {
+			throw new ResourceFoundException("Já existe um cadastro com o cpf informado");
+			
+		}
+		
+		else if (clienteBuscadoPorRg != null) {
+			throw new ResourceFoundException("Já existe um cadastro com o rg informado");
+			
+		}
+		
 		
 		return repository.save(cliente);
 	}
@@ -105,6 +118,9 @@ public class ClienteServices {
 	public Cliente update(Cliente cliente) {
 		
 		logger.info("Atualizando um cliente!");
+		
+		
+		
 		
 		var entity = repository.findById(cliente.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Nenhum registro encontrado com esse ID!"));

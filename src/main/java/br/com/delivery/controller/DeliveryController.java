@@ -90,16 +90,16 @@ public class DeliveryController {
 		return clienteServices.findByNome(nome, sobrenome);
 	}
 	
-//	@GetMapping(value="/buscaclienteporcpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
-//	public Cliente buscaClientePorCpf(@PathVariable(value="cpf") String cpf) {
-//		return clienteServices.findByCpf(cpf);
-//	}
-//	
-//	
-//	@GetMapping(value="/buscaclienteporrg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
-//	public Cliente buscaClientePorRg(@PathVariable(value="rg") String rg) {
-//		return clienteServices.findByRg(rg);
-//	}
+	@GetMapping(value="/buscaclienteporcpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
+	public Cliente buscaClientePorCpf(@PathVariable(value="cpf") String cpf) {
+		return clienteServices.findByCpf(cpf);
+	}
+	
+	
+	@GetMapping(value="/buscaclienteporrg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Cliente buscaClientePorRg(@PathVariable(value="rg") String rg) {
+		return clienteServices.findByRg(rg);
+	}
 	
 	
 	@PostMapping(value = "/cadastracliente", produces = MediaType.APPLICATION_JSON_VALUE,
