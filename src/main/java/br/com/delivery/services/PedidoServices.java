@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
 
-import br.com.delivery.exceptions.ResourceNotFoundException;
 import br.com.delivery.model.Pedido;
 
 @Service
