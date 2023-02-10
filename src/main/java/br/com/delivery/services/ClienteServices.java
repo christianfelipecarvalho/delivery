@@ -93,6 +93,22 @@ public class ClienteServices {
 	
 	public Cliente create(Cliente cliente) {
 		
+		Boolean formatoCorretoRg = ValidadorFormatoRg.validarFormatoRg(cliente.getRg());
+		Boolean formatoCorretoCpf = ValidadorFormatoCPF.validarFormatoCPF(cliente.getCpf());
+		
+		if (formatoCorretoRg == false && formatoCorretoCpf == false) {
+			throw new FormatoIncorretoDeDadoException("O Rg e o Cpf informados estão no formato incorreto");
+		}
+		
+		else if (formatoCorretoRg == false) {
+			throw new FormatoIncorretoDeDadoException("O Rg informado esta no formato incorreto");
+		}
+		
+		else if (formatoCorretoCpf == false) {
+			throw new FormatoIncorretoDeDadoException("O Cpf informado esta no formato incorreto");
+		}
+		
+		
 		Cliente clienteBuscadoPorCpf = repository.findByCpf(cliente.getCpf());
 		Cliente clienteBuscadoPorRg = repository.findByRg(cliente.getRg());
 		
@@ -121,17 +137,37 @@ public class ClienteServices {
 		
 		
 		
+		Cliente clienteBuscadoPorRg = repository.findByRg(cliente.getRg());
+		Cliente clienteBuscadoPorCpf = repository.findByCpf(cliente.getCpf());
+		
 		
 		var entity = repository.findById(cliente.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Nenhum registro encontrado com esse ID!"));
 		
-		entity.setNome(cliente.getNome());
-		entity.setSobrenome(cliente.getSobrenome());
-		entity.setCpf(cliente.getCpf());
-		entity.setRg(cliente.getRg());
-		entity.setEmail(cliente.getEmail());
-		//entity.setEndereco(cliente.getEndereco());
 		
+		
+		Boolean CpfNaoCadastradoEdiferenteDoInformado = clienteBuscadoPorCpf != null && !cliente.getCpf().equals(entity.getCpf());
+		Boolean RgNaoCadastradoEdiferenteDoInformado = clienteBuscadoPorRg != null && !cliente.getRg().equals(entity.getRg());
+		
+		if (CpfNaoCadastradoEdiferenteDoInformado && RgNaoCadastradoEdiferenteDoInformado) {
+			throw new ResourceFoundException("já existem clientes cadastrados com o cpf e rg informados");
+		}
+		
+		if (RgNaoCadastradoEdiferenteDoInformado) {
+			throw new ResourceFoundException("Já existe um cliente cadastrado com este Rg");
+		}
+		
+		else if(CpfNaoCadastradoEdiferenteDoInformado) {
+			throw new ResourceFoundException("Já existe um cliente cadastrado com este Cpf");
+			
+		}
+			entity.setNome(cliente.getNome());
+			entity.setSobrenome(cliente.getSobrenome());
+			entity.setCpf(cliente.getCpf());
+			entity.setRg(cliente.getRg());
+			entity.setEmail(cliente.getEmail());
+		//entity.setEndereco(cliente.getEndereco());
+	
 		
 		return repository.save(cliente);
 	}
