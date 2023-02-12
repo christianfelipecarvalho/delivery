@@ -4,6 +4,17 @@ public enum StatusPedido {
 	
 	ABERTO, 
 	CONCLUIDO,
-	CANCELADO 
+	CANCELADO;
 	
+	public static StatusPedido getStatusPedidoByString(String status) {
+		if (status.equals("ABERTO")) {
+			return ABERTO;	
+		}
+		
+		else if(status.equals("CONCLUIDO")) {
+			return CONCLUIDO;
+		}
+		
+		return CANCELADO;
+	}
 }
