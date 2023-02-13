@@ -127,23 +127,50 @@ public class ClienteServices {
 			
 		}
 		
-		
+		logger.info("cadastrando um cliente..");
 		return repository.save(cliente);
 	}
 	
 	public Cliente update(Cliente cliente) {
 		
-		logger.info("Atualizando um cliente!");
+		Boolean formatoCorretoRg = ValidadorFormatoRg.validarFormatoRg(cliente.getRg());
+		Boolean formatoCorretoCpf = ValidadorFormatoCPF.validarFormatoCPF(cliente.getCpf());
+		
+		if (formatoCorretoRg == false && formatoCorretoCpf == false) {
+			throw new FormatoIncorretoDeDadoException("O Rg e o Cpf informados estão no formato incorreto");
+		}
+		
+		else if (formatoCorretoRg == false) {
+			throw new FormatoIncorretoDeDadoException("O Rg informado esta no formato incorreto");
+		}
+		
+		else if (formatoCorretoCpf == false) {
+			throw new FormatoIncorretoDeDadoException("O Cpf informado esta no formato incorreto");
+		}
 		
 		
-		
+				
 		Cliente clienteBuscadoPorRg = repository.findByRg(cliente.getRg());
 		Cliente clienteBuscadoPorCpf = repository.findByCpf(cliente.getCpf());
 		
 		
+		if (clienteBuscadoPorCpf != null && clienteBuscadoPorRg != null) {
+			throw new ResourceFoundException("Já existe um cadastro com o cpf e rg informados");
+			
+		}
+		
+		else if (clienteBuscadoPorCpf != null) {
+			throw new ResourceFoundException("Já existe um cadastro com o cpf informado");
+			
+		}
+		
+		else if (clienteBuscadoPorRg != null) {
+			throw new ResourceFoundException("Já existe um cadastro com o rg informado");
+			
+		}
+		
 		var entity = repository.findById(cliente.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Nenhum registro encontrado com esse ID!"));
-		
 		
 		
 		Boolean CpfNaoCadastradoEdiferenteDoInformado = clienteBuscadoPorCpf != null && !cliente.getCpf().equals(entity.getCpf());
@@ -161,14 +188,15 @@ public class ClienteServices {
 			throw new ResourceFoundException("Já existe um cliente cadastrado com este Cpf");
 			
 		}
-			entity.setNome(cliente.getNome());
-			entity.setSobrenome(cliente.getSobrenome());
-			entity.setCpf(cliente.getCpf());
-			entity.setRg(cliente.getRg());
-			entity.setEmail(cliente.getEmail());
+		
+		entity.setNome(cliente.getNome());
+		entity.setSobrenome(cliente.getSobrenome());
+		entity.setCpf(cliente.getCpf());
+		entity.setRg(cliente.getRg());
+		entity.setEmail(cliente.getEmail());
 		//entity.setEndereco(cliente.getEndereco());
 	
-		
+		logger.info("Atualizando um cliente!");
 		return repository.save(cliente);
 	}
 	
