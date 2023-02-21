@@ -21,7 +21,7 @@ import br.com.delivery.services.ClienteServices;
 import br.com.delivery.services.PedidoServices;
 
 @RestController
-@RequestMapping("/delivery")
+@RequestMapping("/api/delivery")
 public class DeliveryController {
 
 	@Autowired
@@ -75,34 +75,35 @@ public class DeliveryController {
 		
 	}
 	
-	@GetMapping(value="/buscaclienteporid/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="clientes/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Cliente buscaClientePorId(@PathVariable(value="id") Long id) {
 		         
 		
 		return clienteServices.findById(id); //busca um cliente na base de acordo com o id informado.
 	}
 	
-	
-	@GetMapping(value="/buscaclientepornome/{nome}", produces=MediaType.APPLICATION_JSON_VALUE)
+	//BUSCA POR NOME TESTAR NOVAMENTE 
+	@GetMapping(value="/clientes/nome/{nome}", produces=MediaType.APPLICATION_JSON_VALUE)//TESTAR BUSCAPORNOME
 	public List<Cliente> buscaClientePorNome(@PathVariable(value="nome") String nome,
 											@RequestParam(value="sobrenome", defaultValue="") String sobrenome) {
 		
 		return clienteServices.findByNome(nome, sobrenome);
 	}
-	
-	@GetMapping(value="/buscaclienteporcpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
+
+	// BUSCA POR CPF
+	@GetMapping(value="/clientes/cpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
 	public Cliente buscaClientePorCpf(@PathVariable(value="cpf") String cpf) {
 		return clienteServices.findByCpf(cpf);
 	}
 	
-	
-	@GetMapping(value="/buscaclienteporrg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
+	// BUSCA POR RG
+	@GetMapping(value="/clientes/rg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Cliente buscaClientePorRg(@PathVariable(value="rg") String rg) {
 		return clienteServices.findByRg(rg);
 	}
 	
-	
-	@PostMapping(value = "/cadastracliente", produces = MediaType.APPLICATION_JSON_VALUE,
+	//CADASTRACLIENTE
+	@PostMapping(value = "/clientes", produces = MediaType.APPLICATION_JSON_VALUE,
 	consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Cliente cadastraCliente(@RequestBody Cliente cliente) {
 		
@@ -111,7 +112,7 @@ public class DeliveryController {
 	}
 	 
 	
-	@PutMapping(value = "/alteracliente", produces = MediaType.APPLICATION_JSON_VALUE,
+	@PutMapping(value = "/clientes", produces = MediaType.APPLICATION_JSON_VALUE,
 			consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Cliente alteraCliente(@RequestBody Cliente cliente) {
 		
@@ -120,7 +121,7 @@ public class DeliveryController {
 	}// altera o cadastro do cliente 
 	
 	
-	@DeleteMapping(value="/apagarcliente/{id}")
+	@DeleteMapping(value="/clientes/{id}")
 	public void apagarCliente(@PathVariable(value="id") Long id) {
 		clienteServices.delete(id);  // apaga o cadastro de um cliente na base de dados.
 	}
