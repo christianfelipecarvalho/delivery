@@ -20,6 +20,7 @@ import br.com.delivery.model.Produto;
 import br.com.delivery.model.StatusPedido;
 import br.com.delivery.services.ClienteServices;
 import br.com.delivery.services.PedidoServices;
+import br.com.delivery.services.ProdutoServices;
 
 @RestController
 @RequestMapping("/api/delivery")
@@ -29,6 +30,9 @@ public class DeliveryController {
 	ClienteServices clienteServices;
 	@Autowired
 	PedidoServices pedidoServices;
+
+	@Autowired
+	ProdutoServices produtoServices;
 	
 	//PEDIDOS
 	
@@ -94,6 +98,7 @@ public class DeliveryController {
 											@RequestParam(value="sobrenome", defaultValue="") String sobrenome) {
 		
 		return clienteServices.findByNome(nome, sobrenome);
+
 	}
 
 	// BUSCA POR CPF
@@ -137,22 +142,40 @@ public class DeliveryController {
 	
 	//PRODUTOS
 	
-
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/produtos")
-	public void buscaProdutos(){}
 	// select de todos os produtos no banco 
-	
-	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,
-	consumes = MediaType.APPLICATION_JSON_VALUE, value = "/cadastraproduto")
-	public void cadastraProduto(@RequestBody Produto produto) {
+	@GetMapping(value = "/produtos",produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Produto> buscaProdutos(){
+
+		return produtoServices.findAll();
+	}
+
+	//Pesquisa por id
+	@GetMapping(value="produtos/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Produto buscaProdutoPorId(@PathVariable(value="id") Long id) {
+		         
 		
+		return produtoServices.findById(id); //busca um cliente na base de acordo com o id informado.
+	}
+	 
+	
+	@PostMapping(value = "/produtos", produces = MediaType.APPLICATION_JSON_VALUE,
+	consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Produto cadastraProduto(@RequestBody Produto produto) {
+
+		return produtoServices.create(produto);
+
 	}// cadastra um novo produto, envia como parametro o produto
 	
-	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE,
-	consumes = MediaType.APPLICATION_JSON_VALUE, value = "/alteraproduto")
-	public void alteraProduto(@RequestBody Produto alteracaoProduto) {
-		
+	//Altera os dados de um produto
+	@PutMapping( value = "/produtos", produces = MediaType.APPLICATION_JSON_VALUE,
+	consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Produto alteraProduto(@RequestBody Produto produto) {
+
+		return produtoServices.update(produto);
 	}
 	
-	
+	@DeleteMapping(value="/produto/{id}")
+	public void apagarProduto(@PathVariable(value="id") Long id) {
+		clienteServices.delete(id);  // apaga o cadastro de um produto na base de dados.
+	}
 }
