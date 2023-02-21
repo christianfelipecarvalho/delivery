@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.delivery.model.Cliente;
 import br.com.delivery.model.Pedido;
 import br.com.delivery.model.Produto;
+import br.com.delivery.model.StatusPedido;
 import br.com.delivery.services.ClienteServices;
 import br.com.delivery.services.PedidoServices;
 
@@ -31,29 +32,34 @@ public class DeliveryController {
 	
 	//PEDIDOS
 	
-	@GetMapping(value = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Pedido> buscaPedidos(){
 		return pedidoServices.findAll();
 	}
 	
 	
+	@GetMapping(value = "/buscapedidoporid/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Pedido buscaPedidoPorId(@PathVariable(value="id") Long id) {
+		
+		return pedidoServices.findById(id);
+	}
+
+	@GetMapping(value = "/buscapedidopornumero/{numero}", produces=MediaType.APPLICATION_JSON_VALUE)
+	public Pedido buscaPedidoPorNumero(@PathVariable(value="numero") String numero) {
+		return pedidoServices.findByNumero(numero);
+	}
 	
-//	@GetMapping(value =  "/buscapedidoporid/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-//	public Pedido buscaPedidoPorId(@PathVariable(value="id") Long id) {
-//		
-//		return pedidoServices.findById(id);// adicionar o service da consulta pedido 
-//	}
-//
-//	@GetMapping(value="/buscapedidopornumero/{numero}", produces=MediaType.APPLICATION_JSON_VALUE)
-//	public Pedido buscaPedidoPorNumero(@PathVariable(value="numero") String numero) {
-//		return pedidoServices.findByNumero(numero);
-//	}
-	
+	@GetMapping(value="/buscapedidoporstatus/{status}")
+	public List<Pedido> buscaPedidoPorStatus(@PathVariable(value="status") String status) {
+		return pedidoServices.findByStatus(status);
+	}
 	
 	@PostMapping(value = "/cadastrapedido", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void cadastraPedido(@RequestBody Pedido pedido) {
-		
+		pedidoServices.create(pedido);		
 	}// cadastra um novo pedido, envia como parametro o pedido
+	
+	
 	
 	@PutMapping(value = "/alterapedido", produces = MediaType.APPLICATION_JSON_VALUE,
 	consumes = MediaType.APPLICATION_JSON_VALUE)
