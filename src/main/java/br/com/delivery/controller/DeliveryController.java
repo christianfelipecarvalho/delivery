@@ -93,7 +93,7 @@ public class DeliveryController {
 	}
 	
 	//BUSCA POR NOME TESTAR NOVAMENTE 
-	@GetMapping(value="/clientes/nome/{nome}", produces=MediaType.APPLICATION_JSON_VALUE)//TESTAR BUSCAPORNOME
+	@GetMapping(value="/clientes/buscaclientepornome/{nome}", produces=MediaType.APPLICATION_JSON_VALUE)//TESTAR BUSCAPORNOME
 	public List<Cliente> buscaClientePorNome(@PathVariable(value="nome") String nome,
 											@RequestParam(value="sobrenome", defaultValue="") String sobrenome) {
 		
@@ -102,13 +102,13 @@ public class DeliveryController {
 	}
 
 	// BUSCA POR CPF
-	@GetMapping(value="/clientes/cpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
+	@GetMapping(value="/clientes/buscaclienteporcpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
 	public Cliente buscaClientePorCpf(@PathVariable(value="cpf") String cpf) {
 		return clienteServices.findByCpf(cpf);
 	}
 	
 	// BUSCA POR RG
-	@GetMapping(value="/clientes/rg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/clientes/buscaclienteporrg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Cliente buscaClientePorRg(@PathVariable(value="rg") String rg) {
 		return clienteServices.findByRg(rg);
 	}
