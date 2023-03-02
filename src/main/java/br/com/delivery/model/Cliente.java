@@ -1,12 +1,16 @@
 package br.com.delivery.model;
 
 import java.io.Serializable;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -36,6 +40,10 @@ public class Cliente implements Serializable{
 	
 	@Column(length = 255)
 	private String endereco;
+	
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="pedido")
+	@JoinColumn(name="pedido_id")
+	List<Pedido> pedido;
 	
 	public Long getId() {
 		return id;
