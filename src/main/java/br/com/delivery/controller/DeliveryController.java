@@ -42,36 +42,36 @@ public class DeliveryController {
 	}
 	
 	
-	@GetMapping(value = "/buscapedidoporid/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "pedidos/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Pedido buscaPedidoPorId(@PathVariable(value="id") Long id) {
 		
 		return pedidoServices.findById(id);
 	}
 
-	@GetMapping(value = "/buscapedidopornumero/{numero}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "pedidos/buscapornumero/{numero}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Pedido buscaPedidoPorNumero(@PathVariable(value="numero") String numero) {
 		return pedidoServices.findByNumero(numero);
 	}
 	
-	@GetMapping(value="/buscapedidoporstatus/{status}")
+	@GetMapping(value="pedidos/buscaporstatus/{status}")
 	public List<Pedido> buscaPedidoPorStatus(@PathVariable(value="status") String status) {
 		return pedidoServices.findByStatus(status);
 	}
 	
-	@PostMapping(value = "/cadastrapedido", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void cadastraPedido(@RequestBody Pedido pedido) {
 		pedidoServices.create(pedido);		
 	}// cadastra um novo pedido, envia como parametro o pedido
 	
 	
 	
-	@PutMapping(value = "/alterapedido", produces = MediaType.APPLICATION_JSON_VALUE,
+	@PutMapping(value = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE,
 	consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void alteraPedido(@RequestBody Pedido alteracaoPedido) {
 		
 	}
 	
-	@DeleteMapping(value="/apagarpedido/{id}")
+	@DeleteMapping(value="/pedidos/{id}")
 	public void apagarPedido(@PathVariable(value="id") Long id) {
 		
 	}
@@ -85,7 +85,7 @@ public class DeliveryController {
 		
 	}
 	
-	@GetMapping(value="clientes/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/clientes/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Cliente buscaClientePorId(@PathVariable(value="id") Long id) {
 		         
 		
@@ -93,7 +93,7 @@ public class DeliveryController {
 	}
 	
 	//BUSCA POR NOME TESTAR NOVAMENTE 
-	@GetMapping(value="/clientes/buscaclientepornome/{nome}", produces=MediaType.APPLICATION_JSON_VALUE)//TESTAR BUSCAPORNOME
+	@GetMapping(value="/clientes/buscapornome/{nome}", produces=MediaType.APPLICATION_JSON_VALUE)//TESTAR BUSCAPORNOME
 	public List<Cliente> buscaClientePorNome(@PathVariable(value="nome") String nome,
 											@RequestParam(value="sobrenome", defaultValue="") String sobrenome) {
 		
@@ -102,13 +102,13 @@ public class DeliveryController {
 	}
 
 	// BUSCA POR CPF
-	@GetMapping(value="/clientes/buscaclienteporcpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
+	@GetMapping(value="/clientes/buscaporcpf/{cpf}", produces=MediaType.APPLICATION_JSON_VALUE) 
 	public Cliente buscaClientePorCpf(@PathVariable(value="cpf") String cpf) {
 		return clienteServices.findByCpf(cpf);
 	}
 	
 	// BUSCA POR RG
-	@GetMapping(value="/clientes/buscaclienteporrg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/clientes/buscaporrg/{rg}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Cliente buscaClientePorRg(@PathVariable(value="rg") String rg) {
 		return clienteServices.findByRg(rg);
 	}
@@ -150,13 +150,12 @@ public class DeliveryController {
 	}
 
 	//Pesquisa por id
-	@GetMapping(value="produtos/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/produtos/{id}", produces=MediaType.APPLICATION_JSON_VALUE)
 	public Produto buscaProdutoPorId(@PathVariable(value="id") Long id) {
 		         
 		
 		return produtoServices.findById(id); //busca um cliente na base de acordo com o id informado.
 	}
-	 
 	
 	@PostMapping(value = "/produtos", produces = MediaType.APPLICATION_JSON_VALUE,
 	consumes = MediaType.APPLICATION_JSON_VALUE)
