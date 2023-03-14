@@ -1,20 +1,28 @@
 package br.com.delivery.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name= "pedido")
+//@JsonPropertyOrder({"id", "numero", "quantidadeProduto", "quantidadeTotal", "desconto", "valorTotal", "status", "cliente_id"})
 public class Pedido implements Serializable {
 
 
@@ -27,12 +35,23 @@ public class Pedido implements Serializable {
 	@Column
 	private String numero;
 	
+	@Column(name="data")
+	private Date dataPedido;
+	
 	//@Column
 	//private List<Produto> listaProduto;
 	
 	@Column
 	private Integer quantidadeProduto;
 	
+	public Date getDataPedido() {
+		return dataPedido;
+	}
+
+	public void setDataPedido(Date dataPedido) {
+		this.dataPedido = dataPedido;
+	}
+
 	@Column
 	private Integer quantidadeTotal;
 	
@@ -45,10 +64,16 @@ public class Pedido implements Serializable {
 	@Column 
 	private StatusPedido status;
 	
-	@ManyToOne()
-	@JoinColumn(name= "cliente_id")
-	Cliente cliente;
+	@OneToOne(targetEntity=Cliente.class)
+	@JoinColumn(name="cliente_id", foreignKey = @ForeignKey(name="cliente_id"))
+	private Cliente cliente;
 	
+	
+	
+	//@ManyToMany()
+	//@JoinTable(name="pedido_itens", 
+				//joinColumns= {@JoinColumn(name="pedido_id")}, inverseJoinColumns= {@JoinColumn(name="produto_id")} )
+	//private List<Produto> produtos;
 
 	public Double getValorTotal() {
 		return valorTotal;
@@ -80,6 +105,14 @@ public class Pedido implements Serializable {
 
 	public void setNumero(String numero) {
 		this.numero = numero;
+	}
+	
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+	
+	public Cliente getCliente() {
+		return this.cliente;
 	}
 
 	//public List<Produto> getListaProduto() {
@@ -113,6 +146,5 @@ public class Pedido implements Serializable {
 	public void setDesconto(Double desconto) {
 		this.desconto = desconto;
 	}
-	
 	
 }

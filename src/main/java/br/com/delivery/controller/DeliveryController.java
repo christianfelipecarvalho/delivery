@@ -14,10 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.delivery.customVOs.PedidoCustomVOV1;
+import br.com.delivery.customVOs.PedidoCustomVOV2;
+import br.com.delivery.customVOs.PedidoCustomVOV3;
+import br.com.delivery.customVOs.PedidoCustomVOV4;
+import br.com.delivery.customVOs.PedidoCustomVOV5;
+import br.com.delivery.customVOsConverter.PedidoCustomVOConverter;
 import br.com.delivery.model.Cliente;
 import br.com.delivery.model.Pedido;
 import br.com.delivery.model.Produto;
-import br.com.delivery.model.StatusPedido;
 import br.com.delivery.services.ClienteServices;
 import br.com.delivery.services.PedidoServices;
 import br.com.delivery.services.ProdutoServices;
@@ -37,38 +42,59 @@ public class DeliveryController {
 	//PEDIDOS
 	
 	@GetMapping(value="/pedidos", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Pedido> buscaPedidos(){
+	public List<PedidoCustomVOV1> buscaPedidos(){
 		return pedidoServices.findAll();
 	}
 	
 	
 	@GetMapping(value = "pedidos/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public Pedido buscaPedidoPorId(@PathVariable(value="id") Long id) {
+	public PedidoCustomVOV1 buscaPedidoPorId(@PathVariable(value="id") Long id) {
 		
 		return pedidoServices.findById(id);
 	}
 
 	@GetMapping(value = "pedidos/buscapornumero/{numero}", produces=MediaType.APPLICATION_JSON_VALUE)
-	public Pedido buscaPedidoPorNumero(@PathVariable(value="numero") String numero) {
+	public PedidoCustomVOV1 buscaPedidoPorNumero(@PathVariable(value="numero") String numero) {
 		return pedidoServices.findByNumero(numero);
 	}
 	
 	@GetMapping(value="pedidos/buscaporstatus/{status}")
-	public List<Pedido> buscaPedidoPorStatus(@PathVariable(value="status") String status) {
+	public List<PedidoCustomVOV5> buscaPedidoPorStatus(@PathVariable(value="status") String status) {
 		return pedidoServices.findByStatus(status);
 	}
 	
+	@GetMapping(value="pedidos/buscapedidosporidcliente/{cliente_id}")
+	public List<PedidoCustomVOV3> buscaPedidoPorIdCliente(@PathVariable(value="cliente_id") Long cliente_id) {
+		return pedidoServices.findPedidosByClienteID(cliente_id);
+	}
+	
+	@GetMapping(value="pedidos/buscapedidospordata/{dia}/{mes}/{ano}")
+	public List<PedidoCustomVOV4> buscaPedidoPorData(@PathVariable(value="dia") Integer dia, 
+									@PathVariable(value="mes") Integer mes, 
+									@PathVariable(value="ano") Integer ano){
+		
+		
+		return pedidoServices.findPedidosBydataPedido(dia, mes, ano);
+	}
+	
 	@PostMapping(value = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void cadastraPedido(@RequestBody Pedido pedido) {
+	public void cadastraPedido(@RequestBody PedidoCustomVOV1 pedidoVO) {
+		Pedido pedido = PedidoCustomVOConverter.PedidoVoToPedidoV1(pedidoVO);
+		pedido.setCliente(clienteServices.findById(pedidoVO.getCliente_id()));
+		
 		pedidoServices.create(pedido);		
-	}// cadastra um novo pedido, envia como parametro o pedido
+	}
 	
 	
 	
 	@PutMapping(value = "/pedidos", produces = MediaType.APPLICATION_JSON_VALUE,
 	consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void alteraPedido(@RequestBody Pedido alteracaoPedido) {
+	public void alteraPedido(@RequestBody PedidoCustomVOV2 pedidoVO) {
+		Pedido pedido = PedidoCustomVOConverter.PedidoVoUpdateToPedido(pedidoVO);
 		
+		pedido.setCliente(clienteServices.findById(pedidoVO.getCliente_id()));
+	
+		pedidoServices.update(pedido);
 	}
 	
 	@DeleteMapping(value="/pedidos/{id}")
