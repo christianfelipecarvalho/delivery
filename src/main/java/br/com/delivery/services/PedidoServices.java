@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import br.com.delivery.customVOs.PedidoCustomVOV1;
 import br.com.delivery.customVOs.PedidoCustomVOV2;
 import br.com.delivery.customVOs.PedidoCustomVOV3;
+import br.com.delivery.customVOs.PedidoCustomVOV4;
+import br.com.delivery.customVOs.PedidoCustomVOV5;
 import br.com.delivery.customVOsConverter.PedidoCustomVOConverter;
 import br.com.delivery.exceptions.FormatoIncorretoDeDadoException;
 import br.com.delivery.exceptions.ResourceNotFoundException;
@@ -50,7 +52,7 @@ public class PedidoServices {
 		return PedidoCustomVOConverter.PedidoToPedidoVOV1(pedido);
 	}
 	
-	public List<PedidoCustomVOV1> findByStatus(String status) {
+	public List<PedidoCustomVOV5> findByStatus(String status) {
 		
 		if (!status.equals("ABERTO") && !status.equals("CONCLUIDO") && !status.equals("CANCELADO")) {
 			throw new FormatoIncorretoDeDadoException("O status informado deve ser ABERTO, CONCLUIDO ou CANCELADO");
@@ -63,7 +65,7 @@ public class PedidoServices {
 			throw new ResourceNotFoundException("não existem pedidos cadastrados com o Status informado");
 		}
 		
-		return PedidoCustomVOConverter.PedidosToPedidosVOV1(pedidos);
+		return PedidoCustomVOConverter.PedidosToPedidosVOV5(pedidos);
 		
 	}
 	
@@ -73,13 +75,13 @@ public class PedidoServices {
 		return PedidoCustomVOConverter.PedidosToPedidosVOV3(pedidos);
 	}
 	
-	public List<PedidoCustomVOV2> findPedidosBydataPedido(Integer dia, Integer mes, Integer ano){
+	public List<PedidoCustomVOV4> findPedidosBydataPedido(Integer dia, Integer mes, Integer ano){
 		
 		Date data = Date.from(LocalDate.of(ano, mes, dia).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		
 		List<Pedido> pedidos = repository.findByDataPedido(data);
 		
-		return PedidoCustomVOConverter.PedidosToPedidosVOV2(pedidos);
+		return PedidoCustomVOConverter.PedidosToPedidosVOV4(pedidos);
 	}
 	
 	public Pedido create(Pedido pedido) {

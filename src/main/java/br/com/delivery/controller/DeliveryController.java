@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.delivery.customVOs.PedidoCustomVOV1;
 import br.com.delivery.customVOs.PedidoCustomVOV2;
 import br.com.delivery.customVOs.PedidoCustomVOV3;
+import br.com.delivery.customVOs.PedidoCustomVOV4;
+import br.com.delivery.customVOs.PedidoCustomVOV5;
 import br.com.delivery.customVOsConverter.PedidoCustomVOConverter;
 import br.com.delivery.model.Cliente;
 import br.com.delivery.model.Pedido;
@@ -24,7 +26,6 @@ import br.com.delivery.model.Produto;
 import br.com.delivery.services.ClienteServices;
 import br.com.delivery.services.PedidoServices;
 import br.com.delivery.services.ProdutoServices;
-import br.com.delivery.utils.GeradorDateFormatado;
 
 @RestController
 @RequestMapping("/api/delivery")
@@ -58,7 +59,7 @@ public class DeliveryController {
 	}
 	
 	@GetMapping(value="pedidos/buscaporstatus/{status}")
-	public List<PedidoCustomVOV1> buscaPedidoPorStatus(@PathVariable(value="status") String status) {
+	public List<PedidoCustomVOV5> buscaPedidoPorStatus(@PathVariable(value="status") String status) {
 		return pedidoServices.findByStatus(status);
 	}
 	
@@ -68,7 +69,7 @@ public class DeliveryController {
 	}
 	
 	@GetMapping(value="pedidos/buscapedidospordata/{dia}/{mes}/{ano}")
-	public List<PedidoCustomVOV2> buscaPedidoPorData(@PathVariable(value="dia") Integer dia, 
+	public List<PedidoCustomVOV4> buscaPedidoPorData(@PathVariable(value="dia") Integer dia, 
 									@PathVariable(value="mes") Integer mes, 
 									@PathVariable(value="ano") Integer ano){
 		

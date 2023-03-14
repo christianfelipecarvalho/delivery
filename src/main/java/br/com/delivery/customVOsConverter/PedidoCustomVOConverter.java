@@ -1,6 +1,5 @@
 package br.com.delivery.customVOsConverter;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +7,8 @@ import java.util.List;
 import br.com.delivery.customVOs.PedidoCustomVOV1;
 import br.com.delivery.customVOs.PedidoCustomVOV2;
 import br.com.delivery.customVOs.PedidoCustomVOV3;
+import br.com.delivery.customVOs.PedidoCustomVOV4;
+import br.com.delivery.customVOs.PedidoCustomVOV5;
 import br.com.delivery.model.Pedido;
 import br.com.delivery.utils.GeradorDateFormatado;
 
@@ -79,6 +80,36 @@ public class PedidoCustomVOConverter {
 		return pedidoVO;
 	}
 	
+	public static PedidoCustomVOV4 PedidoToPedidoVOV4(Pedido pedido) {
+		
+		PedidoCustomVOV4 pedidoVO = new PedidoCustomVOV4();
+		pedidoVO.setId(pedido.getId());
+		pedidoVO.setNumero(pedido.getNumero());
+		pedidoVO.setDesconto(pedido.getDesconto());
+		pedidoVO.setQuantidadeProduto(pedido.getQuantidadeProduto());
+		pedidoVO.setQuantidadeTotal(pedido.getQuantidadeTotal());
+		pedidoVO.setStatus(pedido.getStatus());
+		pedidoVO.setValorTotal(pedido.getValorTotal());
+		pedidoVO.setCliente_id(pedido.getCliente().getId());
+		
+		return pedidoVO;
+	}
+	
+	public static PedidoCustomVOV5 PedidoToPedidoVOV5(Pedido pedido) {
+		
+		PedidoCustomVOV5 pedidoVO = new PedidoCustomVOV5();
+		pedidoVO.setId(pedido.getId());
+		pedidoVO.setNumero(pedido.getNumero());
+		pedidoVO.setDataPedido(sdf.format(pedido.getDataPedido()));
+		pedidoVO.setDesconto(pedido.getDesconto());
+		pedidoVO.setQuantidadeProduto(pedido.getQuantidadeProduto());
+		pedidoVO.setQuantidadeTotal(pedido.getQuantidadeTotal());
+		pedidoVO.setValorTotal(pedido.getValorTotal());
+		pedidoVO.setCliente_id(pedido.getCliente().getId());
+		
+		return pedidoVO;
+	}
+	
 	public static List<PedidoCustomVOV1> PedidosToPedidosVOV1(List<Pedido> pedidos) {
 		List<PedidoCustomVOV1> pedidosVO = new ArrayList<>();
 		
@@ -107,6 +138,30 @@ public class PedidoCustomVOConverter {
 		
 		for (Pedido pedido: pedidos) {	
 			pedidosVO.add(PedidoToPedidoVOV3(pedido));
+			
+			
+		}
+		
+		return pedidosVO;
+	}
+	
+	public static List<PedidoCustomVOV4> PedidosToPedidosVOV4(List<Pedido> pedidos) {
+		List<PedidoCustomVOV4> pedidosVO = new ArrayList<>();
+		
+		for (Pedido pedido: pedidos) {	
+			pedidosVO.add(PedidoToPedidoVOV4(pedido));
+			
+			
+		}
+		
+		return pedidosVO;
+	}
+	
+	public static List<PedidoCustomVOV5> PedidosToPedidosVOV5(List<Pedido> pedidos) {
+		List<PedidoCustomVOV5> pedidosVO = new ArrayList<>();
+		
+		for (Pedido pedido: pedidos) {	
+			pedidosVO.add(PedidoToPedidoVOV5(pedido));
 			
 			
 		}
